@@ -29,7 +29,7 @@ Coldfetch is a system information fetcher similar to `neofetch` and `screenfetch
 To install Coldfetch, you can use the provided `install.sh` script. Clone the repository and run the script:
 
 ```bash
-git clone https://github.com/yourusername/coldfetch.git
+git clone https://github.com/Akshay-code-space/coldfetch.git
 cd coldfetch
 chmod +x install.sh
 ./install.sh
