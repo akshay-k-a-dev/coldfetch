@@ -18,106 +18,190 @@ get_os_info() {
     HOSTNAME=$(hostname)
 }
 
+# Function to display ASCII art logo based on OS
+display_logo() {
+    case "$OS_NAME" in
+        *"Ubuntu"*)
+            echo -e "${CYAN}
+            .-/+oossssoo+/-.               
+        \`:+ssssssssssssssssss+:           
+      -+ssssssssssssssssssyyssss+-        
+    .ossssssssssssssssssdMMMNysssso.      
+   /ssssssssssshdmmNNmmyNMMMMhssssss/     
+  +ssssssssshmydMMMMMMMNddddyssssssss+    
+ /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/   
+.ssssssssdMMMNhsssssssssshNMMMdssssssss.  
++sssshhhyNMMNyssssssssssssyNMMMysssssss+ 
+ossyNMMMNyMMhsssssssssssssshmmmhssssssso 
+ossyNMMMNyMMhsssssssssssssshmmmhssssssso 
++sssshhhyNMMNyssssssssssssyNMMMysssssss+ 
+.ssssssssdMMMNhsssssssssshNMMMdssssssss.  
+ /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/   
+  +ssssssssshmydMMMMMMMNddddyssssssss+    
+   /ssssssssssshdmmNNmmyNMMMMhssssssss/     
+    .ossssssssssssssssssdMMMNysssso.      
+      -+ssssssssssssssssssyyssss+-        
+        \`:+ssssssssssssssssss+:           
+            .-/+oossssoo+/-.               
+${RESET}"
+            ;;
+        *"Arch"*)
+            echo -e "${CYAN}
+      /\                      
+     /  \   Arch Linux        
+    / /\ \                    
+   / ____ \                   
+  /_/    \_\                  
+${RESET}"
+            ;;
+        *"Fedora"*)
+            echo -e "${CYAN}
+          ▄▄▄▄▄▄▄▄▄▄▄  
+         █           █ 
+         █    Fedora  █
+         █           █ 
+          ▀▀▀▀▀▀▀▀▀▀▀  
+${RESET}"
+            ;;
+        *"Debian"*)
+            echo -e "${CYAN}
+       _,met\$\$\$\$\$gg.          
+    ,g\$\$\$\$\$\$\$\$\$\$\$\$\$P.       
+  ,g\$\$P\"\"       \"\"\"Y\$\$.\".    
+ ,\$\$P'              \`C\$\$C    
+,\$\$P       ,ggs.     \`W\$\$    
+d\$\$'     ,\$P\"\'   .    \$\$\$    
+\$\$\$P      d\$'     ,    \$\$P    
+\$\$\$\$c    .\$\"    ,     d\$\$'    
+ \`Y\$\$\$b   \`.'   ,      \$\$P     
+   \`\"Y\$\$b       ,     d\$\$'     
+      \`\"Y\$\$b,       ,d\$\$'      
+         \`\"Y\$\$b,   ,d\$\$'       
+            \`\"Y\$\$b,d\$\$'        
+               \`\"Y\$\$'          
+                  \$\$            
+                  \$\$            
+                  \"\"            
+${RESET}"
+            ;;
+        *"CentOS"*)
+            echo -e "${CYAN}
+                 ..            
+               .PLTJ.          
+              <><><><>         
+     KKSSV' 4KKK LJ KKKL.      
+     KKV,  4KKKK LJ KKKK.      
+     V'   4KKKKK LJ KKKK.      
+         .KKKKK' LJ 'KKKK.     
+ L.     .KKKK'   LJ   'KKK     
+ 'M.    'KE'     LJ    'K.     
+  'W.   '         J     '      
+   'W.             J           
+    '                E         
+${RESET}"
+            ;;
+        *"Manjaro"*)
+            echo -e "${CYAN}
+██████████████████  ████████  
+██████████████████  ████████  
+██████████████████  ████████  
+██████████████████  ████████  
+████████            ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+████████  ████████  ████████  
+${RESET}"
+            ;;
+        *)
+            echo -e "${CYAN}
+   _______    _       
+  |__   __|  | |      
+     | | ___ | | ___  
+     | |/ _ \| |/ _ \ 
+     | | (_) | |  __/ 
+     |_|\___/|_|\___| 
+${RESET}"
+            ;;
+    esac
+}
+
+# Function to display a progress bar
+progress_bar() {
+    local percentage=$1
+    local label=$2
+    local bar_length=20
+    local filled=$((percentage * bar_length / 100))
+    local empty=$((bar_length - filled))
+
+    printf "  ${CYAN}%-10s ${RESET}[${GREEN}%-${filled}s${RESET}%*s] %3d%%\n" \
+        "$label" "" $empty " " $percentage
+}
+
 # Function to display system information
 coldfetch() {
     clear
+    display_logo
     echo -e "${CYAN}=== System Information ===${RESET}"
-    echo -e "${CYAN}Hostname:${RESET} $HOSTNAME"
-    get_os
-    get_kernel
-    get_uptime
-    get_terminal
-    get_shell
-    get_cpu
-    get_cpu_fan_speed
-    get_memory
-    get_ram_speed
-    get_gpu
-    get_storage
-    get_storage_speed
-    get_distribution
-    get_package_manager
-    get_number_of_packages
-    get_screen_resolution
-    get_language
-}
+    echo ""
 
-# Function to get OS details
-get_os() {
-    echo -e "${CYAN}OS:${RESET} $OS_PRETTY_NAME"
-}
+    # Hostname and OS
+    echo -e "  ${CYAN}Hostname:${RESET} $HOSTNAME"
+    echo -e "  ${CYAN}OS:${RESET} $OS_PRETTY_NAME"
+    echo -e "  ${CYAN}Kernel:${RESET} $(uname -r)"
+    echo -e "  ${CYAN}Uptime:${RESET} $(uptime -p | sed 's/up //')"
+    echo ""
 
-# Function to get kernel details
-get_kernel() {
-    echo -e "${CYAN}Kernel:${RESET} $(uname -r)"
-}
+    # Shell and Terminal
+    echo -e "  ${CYAN}Shell:${RESET} $SHELL ($(bash --version | head -n 1))"
+    echo -e "  ${CYAN}Terminal:${RESET} $TERM"
+    echo ""
 
-# Function to get uptime
-get_uptime() {
-    echo -e "${CYAN}Uptime:${RESET} $(uptime -p | sed 's/up //')"
-}
-
-# Function to get terminal details
-get_terminal() {
-    TERMINAL=$(echo $TERM)
-    echo -e "${CYAN}Terminal:${RESET} $TERMINAL"
-}
-
-# Function to get shell details
-get_shell() {
-    echo -e "${CYAN}Shell:${RESET} $SHELL ($(bash --version | head -n 1))"
-}
-
-# Function to get CPU details
-get_cpu() {
+    # CPU and Fan Speed
     CPU_MODEL=$(grep 'model name' /proc/cpuinfo | uniq | awk -F: '{print $2}' | xargs)
     CPU_CORES=$(nproc --all)
     CPU_FREQ=$(lscpu | grep "CPU MHz" | awk '{print $3/1000 " GHz"}')
-    echo -e "${CYAN}CPU:${RESET} $CPU_MODEL ($CPU_CORES cores @ $CPU_FREQ)"
-}
-
-# Function to get CPU fan speed
-get_cpu_fan_speed() {
-    # Fetch fan speed using sensors
+    echo -e "  ${CYAN}CPU:${RESET} 🖥️ $CPU_MODEL ($CPU_CORES cores @ $CPU_FREQ)"
     FAN_SPEED=$(sensors | grep -m 1 "fan" | awk '{print $2 " RPM"}')
     if [ -z "$FAN_SPEED" ]; then
         FAN_SPEED="Not available"
     fi
-    echo -e "${CYAN}CPU Fan Speed: ${RESET}$FAN_SPEED"
-}
+    echo -e "  ${CYAN}Fan Speed:${RESET} 🔧 $FAN_SPEED"
+    echo ""
 
-# Function to get memory details
-get_memory() {
-    RAM_TOTAL=$(free -h | grep Mem | awk '{print $2}')
-    RAM_USED=$(free -h | grep Mem | awk '{print $3}')
-    RAM_AVAILABLE=$(free -h | grep Mem | awk '{print $7}')
-    echo -e "${CYAN}Memory:${RESET} $RAM_USED / $RAM_TOTAL (Available: $RAM_AVAILABLE)"
-}
-
-# Function to get RAM speed
-get_ram_speed() {
+    # Memory
+    RAM_TOTAL=$(free -b | grep Mem | awk '{print $2}')
+    RAM_USED=$(free -b | grep Mem | awk '{print $3}')
+    RAM_PERCENT=$((RAM_USED * 100 / RAM_TOTAL))
+    RAM_TOTAL_HUMAN=$(free -h | grep Mem | awk '{print $2}')
+    RAM_USED_HUMAN=$(free -h | grep Mem | awk '{print $3}')
+    echo -e "  ${CYAN}Memory:${RESET} 💾 $RAM_USED_HUMAN / $RAM_TOTAL_HUMAN"
+    progress_bar $RAM_PERCENT "RAM Usage"
     RAM_SPEED=$(sudo dmidecode --type memory | grep "Speed:" | grep -o '[0-9]\+' | head -n 1)
-    echo -e "${CYAN}RAM Speed:${RESET} ${RAM_SPEED} MHz"
-}
+    echo -e "  ${CYAN}RAM Speed:${RESET} ⚡ ${RAM_SPEED} MHz"
+    echo ""
 
-# Function to get GPU details
-get_gpu() {
+    # GPU
     if command -v nvidia-smi > /dev/null; then
         GPU_NAME=$(nvidia-smi --query-gpu=name --format=csv,noheader,nounits)
         GPU_TEMP=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)
         GPU_FAN=$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits)
         GPU_CLOCK=$(nvidia-smi --query-gpu=clocks.current.graphics --format=csv,noheader,nounits)
-        GPU_VRAM_TOTAL=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | awk '{print $1/1024 " MiB"}')
-        GPU_VRAM_USED=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | awk '{print $1/1024 " MiB"}')
-        echo -e "${CYAN}Graphics:${RESET} NVIDIA $GPU_NAME | Temp: ${GPU_TEMP}°C | Fan: ${GPU_FAN}% | Clock: ${GPU_CLOCK} MHz | VRAM: ${GPU_VRAM_USED} / ${GPU_VRAM_TOTAL}"
-    elif command -v amdgpu-pro > /dev/null; then
-        GPU_NAME=$(amdgpu-pro --query | grep 'Device' | awk -F': ' '{print $2}')
-        GPU_TEMP=$(sensors | grep -i 'edge' | head -n 1 | awk '{print $2}')
-        GPU_FAN=$(sensors | grep -i 'fan' | head -n 1 | awk '{print $2}')
-        GPU_CLOCK=$(cat /sys/class/drm/card*/device/pp_dpm_sclk | grep '*' | awk '{print $2}')
-        GPU_VRAM_TOTAL=$(grep 'Memory:' /opt/amdgpu/share/AMDGPUUsage | awk '{print $2}')
-        GPU_VRAM_USED=$(grep 'Used Memory:' /opt/amdgpu/share/AMDGPUUsage | awk '{print $3}')
-        echo -e "${CYAN}Graphics:${RESET} AMD $GPU_NAME | Temp: ${GPU_TEMP}°C | Fan: ${GPU_FAN} RPM | Clock: ${GPU_CLOCK} MHz | VRAM: ${GPU_VRAM_USED} / ${GPU_VRAM_TOTAL}"
+        GPU_VRAM_TOTAL=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | awk '{print $1}')
+        GPU_VRAM_USED=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | awk '{print $1}')
+        GPU_VRAM_PERCENT=$((GPU_VRAM_USED * 100 / GPU_VRAM_TOTAL))
+        GPU_VRAM_TOTAL_HUMAN=$(awk "BEGIN {printf \"%.2f\", $GPU_VRAM_TOTAL / 1024}")" MiB"
+        GPU_VRAM_USED_HUMAN=$(awk "BEGIN {printf \"%.2f\", $GPU_VRAM_USED / 1024}")" MiB"
+        echo -e "  ${CYAN}Graphics:${RESET} 🎮 NVIDIA $GPU_NAME | Temp: ${GPU_TEMP}°C | Fan: ${GPU_FAN}% | Clock: ${GPU_CLOCK} MHz"
+        echo -e "  ${CYAN}VRAM:${RESET} 💾 ${GPU_VRAM_USED_HUMAN} / ${GPU_VRAM_TOTAL_HUMAN}"
+        progress_bar $GPU_VRAM_PERCENT "VRAM Usage"
     else
         GPU_INFO=$(lspci | grep -i 'vga\|3d\|2d')
         if [ -z "$GPU_INFO" ]; then
@@ -126,77 +210,14 @@ get_gpu() {
                 GPU_INFO="Integrated GPU"
             fi
         fi
-        echo -e "${CYAN}Graphics:${RESET} $GPU_INFO"
+        echo -e "  ${CYAN}Graphics:${RESET} 🎮 $GPU_INFO"
     fi
-}
+    echo ""
 
-# Function to display storage details
-get_storage() {
-    echo -e "${CYAN}Storage:${RESET}"
+    # Storage
+    echo -e "  ${CYAN}Storage:${RESET} 💾"
     lsblk -o NAME,SIZE,MODEL | grep -v "loop\|sr0"
-}
-
-# Function to display storage speed details
-get_storage_speed() {
-    STORAGE_DEVICES=$(lsblk -d -o NAME | grep -v "loop\|NAME\|sr0")
-    for DEV in $STORAGE_DEVICES; do
-        STORAGE_SPEED=$(sudo hdparm -tT /dev/$DEV | grep "Timing" | head -n 1)
-        echo -e "${CYAN}${DEV}:${RESET} $STORAGE_SPEED"
-    done
-}
-
-# Function to get distribution name
-get_distribution() {
-    echo -e "${CYAN}Distribution:${RESET} $OS_NAME"
-}
-
-# Function to get package manager details
-get_package_manager() {
-    if command -v apt > /dev/null; then
-        PACKAGE_MANAGER="APT $(apt -v | head -n 1)"
-    elif command -v pacman > /dev/null; then
-        PACKAGE_MANAGER="Pacman $(pacman -V | head -n 1)"
-    elif command -v rpm > /dev/null; then
-        PACKAGE_MANAGER="RPM $(rpm --version | head -n 1)"
-    elif command -v dnf > /dev/null; then
-        PACKAGE_MANAGER="DNF $(dnf --version | head -n 1)"
-    elif command -v zypper > /dev/null; then
-        PACKAGE_MANAGER="Zypper $(zypper --version | head -n 1)"
-    elif command -v eopkg > /dev/null; then
-        PACKAGE_MANAGER="eopkg $(eopkg --version | head -n 1)"
-    elif command -v xbps > /dev/null; then
-        PACKAGE_MANAGER="XBPS $(xbps --version | head -n 1)"
-    else
-        PACKAGE_MANAGER="Unknown"
-    fi
-    echo -e "${CYAN}Package Manager:${RESET} $PACKAGE_MANAGER"
-}
-
-# Function to display number of installed packages
-get_number_of_packages() {
-    if command -v dpkg > /dev/null; then
-        NUM_PACKAGES=$(dpkg-query -f '${binary:Package}\n' -W | wc -l)
-        echo -e "${CYAN}Number of Packages:${RESET} $NUM_PACKAGES (Debian-based)"
-    elif command -v rpm > /dev/null; then
-        NUM_PACKAGES=$(rpm -qa | wc -l)
-        echo -e "${CYAN}Number of Packages:${RESET} $NUM_PACKAGES (RPM-based)"
-    elif command -v pacman > /dev/null; then
-        NUM_PACKAGES=$(pacman -Q | wc -l)
-        echo -e "${CYAN}Number of Packages:${RESET} $NUM_PACKAGES (Arch Linux)"
-    else
-        echo -e "${CYAN}Number of Packages:${RESET} Not available"
-    fi
-}
-
-# Function to get screen resolution
-get_screen_resolution() {
-    SCREEN_RESOLUTION=$(xdpyinfo | grep dimensions | awk '{print $2}')
-    echo -e "${CYAN}Screen Resolution:${RESET} $SCREEN_RESOLUTION"
-}
-
-# Function to get language details
-get_language() {
-    echo -e "${CYAN}Language:${RESET} $LANG"
+    echo ""
 }
 
 # Main function to run coldfetch
